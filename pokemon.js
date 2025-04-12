@@ -37,28 +37,65 @@ let allPokemon = [];
 //   });
 
 //   ? Axios function
+// ! Refactor this code to use async/await(DONE)
+const getAllPokemon = async () => {
+  try {
+    // ?   define a response and data
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon?limit=${MAX_POKEMON}`
+    );
+    const data = response.data;
 
-const getAllPokemon = () => {
-  axios
-    .get(`https://pokeapi.co/api/v2/pokemon?limit=${MAX_POKEMON}`)
-    .then((response) => {
-      const data = response.data;
-      //   console.log("The pokemon data,", data);
-      //   console.log("the pokemon in data is:", data.results[0]);
-      //   console.log("the name of the  pokemon in data is:", data.results[0].name);
-      //   console.log(
-      //     "the name url of the  pokemon in data is:",
-      //     data.results[0].url
-      //   );
+    //? log the data for debugging
+    console.log("The pokemon data:", data);
+    console.log("The pokemon in data is:", data.results[0]);
+    console.log("The name of the pokemon in data is:", data.results[0].name);
+    console.log("The URL of the pokemon in data is:", data.results[0].url);
 
-      // ? Add the data to Allpokemon and console log it
-      allPokemon = data.results;
-      //   console.log("the total pokemon in data is:", data.results);
-    })
-    .catch((error) => {
-      console.error("Error fetching,Pokemon:", error);
-    });
+    //  ? Store all the pokemon
+    allPokemon = data.results;
+    console.log("the total pokemon in the data is:", data.results.length);
+  } catch (error) {
+    console.error("Error fetching Pokemon:", error);
+  }
 };
+
 getAllPokemon();
 
 // ? Seeing if the pokemon are inside AllPokemon outside the function
+// ! tutorial code: want to try it using axios
+// async function fetchPokemonDataBeforeRedirect(id) {
+//   try {
+//     const response = await promise.all(
+//       `https://pokeapi.co/api/v2/pokemon?limit=${id}`
+//     );
+//     const data = response.data;
+//     allPokemon = data.results;
+//   } catch (error) {
+//     console.error("Error fetching Pokemon:", error);
+//   }
+// }
+
+const fetchPokemonDataBeforeRedirect = async (id) => {
+  try {
+    // ? Attempting a parallel request with two constants, pokemon and pokemon species.
+    const [pokemon, pokemonSpecies] = await Promise.all([
+      axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`),
+      axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}`),
+    ]);
+
+    // Handle your data, which will be in pokemon.data and pokemonSpecies.data
+    console.log("Pokemon Data:", pokemon.data);
+    console.log("Pokemon Species Data:", pokemonSpecies.data);
+
+    return true;
+  } catch (error) {
+    console.error("Failed to fetch Pokemon data before redirect:", error);
+  }
+};
+
+// ? A function that displays the pokemon
+
+const displayPokemon = (pokemon) => {
+  // ? call the listWrapper we already made in the HTML
+};
