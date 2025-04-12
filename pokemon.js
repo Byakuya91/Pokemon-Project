@@ -13,6 +13,10 @@ const numberFilter = document.querySelector("#number");
 const nameFilter = document.querySelector("#name");
 const notFoundMessage = document.querySelector("#not-fond-message");
 
+// ? learning about the DOM via console logs
+
+console.log("the listWrapper document is:", listWrapper);
+
 // ? Variable declarations for pokedex
 
 // array to store all pokemon
@@ -47,14 +51,14 @@ const getAllPokemon = async () => {
     const data = response.data;
 
     //? log the data for debugging
-    console.log("The pokemon data:", data);
-    console.log("The pokemon in data is:", data.results[0]);
-    console.log("The name of the pokemon in data is:", data.results[0].name);
-    console.log("The URL of the pokemon in data is:", data.results[0].url);
+    // console.log("The pokemon data:", data);
+    // console.log("The pokemon in data is:", data.results[0]);
+    // console.log("The name of the pokemon in data is:", data.results[0].name);
+    // console.log("The URL of the pokemon in data is:", data.results[0].url);
 
     //  ? Store all the pokemon
     allPokemon = data.results;
-    console.log("the total pokemon in the data is:", data.results.length);
+    // console.log("the total pokemon in the data is:", data.results.length);
 
     // ? Display the pokemon
     displayAllPokemon(allPokemon);
@@ -79,6 +83,8 @@ getAllPokemon();
 //   }
 // }
 
+// ? My attempt to fetch the pokemon individually
+
 const fetchPokemonDataBeforeRedirect = async (id) => {
   try {
     // ? Attempting a parallel request with two constants, pokemon and pokemon species.
@@ -88,8 +94,8 @@ const fetchPokemonDataBeforeRedirect = async (id) => {
     ]);
 
     // Handle your data, which will be in pokemon.data and pokemonSpecies.data
-    console.log("Pokemon Data:", pokemon.data);
-    console.log("Pokemon Species Data:", pokemonSpecies.data);
+    // console.log("Pokemon Data:", pokemon.data);
+    // console.log("Pokemon Species Data:", pokemonSpecies.data);
 
     return true;
   } catch (error) {
@@ -134,3 +140,51 @@ const displayAllPokemon = (pokemon) => {
     listWrapper.appendChild(listItem);
   });
 };
+
+// ?enable the search on the pokedex.
+// Search function and event listener
+searchInput.addEventListener("keyup", handleSearch);
+
+//   ! refactor the handleSearch function to extract the filter logic into a separate function
+function handleSearch() {
+  //   Create a searchTerm
+  const searchTerm = searchInput.value.toLowerCase();
+  // filter the pokemon
+  const filteredPokemon = getFilteredPokemon(searchTerm);
+  // display the pokemon
+  displayAllPokemon(filteredPokemon);
+
+  //   Message for not found
+  notFoundMessage.style.display =
+    filteredPokemon.length === 0 ? "block" : "none";
+}
+
+const getFilteredPokemon = (searchTerm) => {
+  // ? Checking if the number radio button or name radio button is checked for search
+  if (numberFilter.checked) {
+    return allPokemon.filter((pokemon) => {
+      const pokemonID = pokemon.url.split("/")[6];
+      return pokemonID.startsWith(searchTerm);
+    });
+  } else if (nameFilter.checked) {
+    return allPokemon.filter((pokemon) => {
+      return pokemon.name.toLowerCase().startsWith(searchTerm);
+    });
+  } else {
+    return allPokemon;
+  }
+};
+
+// ? wire  the close button
+const closeButton = document.querySelector(".search-close-icon");
+
+closeButton.addEventListener("click", clearSearch);
+
+function clearSearch() {
+  // clear the searchBar
+  searchInput.value = "";
+  //   Rerun display function
+  displayAllPokemon(allPokemon);
+  //   Message for not found
+  notFoundMessage.style.display = "none";
+}
