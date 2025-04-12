@@ -55,6 +55,9 @@ const getAllPokemon = async () => {
     //  ? Store all the pokemon
     allPokemon = data.results;
     console.log("the total pokemon in the data is:", data.results.length);
+
+    // ? Display the pokemon
+    displayAllPokemon(allPokemon);
   } catch (error) {
     console.error("Error fetching Pokemon:", error);
   }
@@ -96,6 +99,38 @@ const fetchPokemonDataBeforeRedirect = async (id) => {
 
 // ? A function that displays the pokemon
 
-const displayPokemon = (pokemon) => {
+const displayAllPokemon = (pokemon) => {
   // ? call the listWrapper we already made in the HTML
+  //   ? Every time you fetch you clear the HTML
+  listWrapper.innerHTML = "";
+
+  // ? for loop for each pokemon
+  pokemon.forEach((pokemon) => {
+    //     define pokemon id
+    const pokemonID = pokemon.url.split("/")[6];
+    // define the listitem
+    const listItem = document.createElement("div");
+    listItem.className = "list-item";
+    listItem.innerHTML = `
+   <div class = "number-wrap">
+      <p class = "caption-fonts">#${pokemonID}</p>
+   </div>
+   <div class = "image-wrap">
+     <img src="https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/dream-world/${pokemonID}.svg" alt="${pokemon.name}" />
+   </div>
+    <div class = "name-wrap">
+      <p class = "body3-fonts">#${pokemon.name}</p>
+   </div>
+`;
+    //    ? create an event listener for the ListItem
+    listItem.addEventListener("click", async () => {
+      const success = await fetchPokemonDataBeforeRedirect(pokemonID);
+      if (success) {
+        window.location.href = `./detail.html?id=${pokemonID}`;
+      }
+    });
+
+    // ? append to listItem to listWrapper.
+    listWrapper.appendChild(listItem);
+  });
 };
