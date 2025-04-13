@@ -96,7 +96,7 @@ const typeColors = {
   dragon: "#7038F8",
   dark: "#705848",
   steel: "#B8B8D0",
-  dark: "#EE99AC",
+  fairy: "#EE99AC",
 };
 
 // ? function to set the element styles
@@ -147,17 +147,18 @@ const setTypeBackgroundColor = (pokemon) => {
     "backgroundColor",
     color
   );
+
   setElementStyles(
     document.querySelectorAll(".stats-wrap p.stats"),
     "color",
     color
   );
+
   setElementStyles(
     document.querySelectorAll(".stats-wrap .progress-bar"),
     "color",
     color
   );
-
   //? define rgba color and style tag
   const rgbaColor = rgbaFromHex(color);
   const styleTag = document.createElement("style");
@@ -281,15 +282,14 @@ const displayPokemonDetails = (pokemon) => {
   });
 
   //   ? modify stats wrapper
-  const statsWrapper = document.querySelector(".stats-wrap");
-
+  const statsWrapper = document.querySelector(".stats-wrapper");
   statsWrapper.innerHTML = "";
 
   // ? loop through the stats and add them to the stats wrapper
-  const statsNameWrapping = {
+  const statNameMapping = {
     hp: "HP",
-    atk: "ATK",
-    def: "DEF",
+    attack: "ATK",
+    defense: "DEF",
     "special-attack": "SATK",
     "special-defense": "SDEF",
     speed: "SPD",
@@ -297,6 +297,8 @@ const displayPokemonDetails = (pokemon) => {
 
   // ? loop through the stats and add them to the stats wrapper
   stats.forEach(({ base_stat, stat }) => {
+    //  Log the stat name to debug
+    console.log("the stat names are:", stat.name);
     //   ? create the stat and class
     const statDiv = document.createElement("div");
     statDiv.className = "stats-wrap";
@@ -306,12 +308,12 @@ const displayPokemonDetails = (pokemon) => {
 
     createAndAppendElements(statsWrapper, "p", {
       className: "body3-fonts stats",
-      textContent: statsNameWrapping[stat.name],
+      textContent: statNameMapping[stat.name],
     });
 
     //  ? adding the stats name and progress bar
     createAndAppendElements(statsWrapper, "p", {
-      className: "body3-fonts stats",
+      className: "body3-fonts",
       textContent: String(base_stat).padStart(3, "0"),
     });
     createAndAppendElements(statsWrapper, "progress", {
