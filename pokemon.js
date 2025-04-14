@@ -14,11 +14,29 @@ const nameFilter = document.querySelector("#name");
 const notFoundMessage = document.querySelector("#not-fond-message");
 const sortIcon = document.getElementById("sort-icon");
 const filterWrapper = document.querySelector(".filter-wrapper");
+
 // ! Trouble shooting clicked icon for radio
-sortIcon.addEventListener("click", () => {
-  // console.log("Sort icon clicked!"); // Debug check
+// ! delay effect when clicking the button.
+
+// ? event listener functions for radio buttons
+sortIcon.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevents bubbling up if needed
+  console.log("Sort icon clicked!"); // Debug check
   filterWrapper.classList.toggle("visible");
 });
+
+// ? event listener function for search input
+const toggleCloseButton = () => {
+  if (searchInput.value.trim() !== "") {
+    // show the button when there is text
+    closeButton.style.display = "block";
+  } else {
+    closeButton.style.display = "none";
+  }
+};
+
+// Add event listeners
+searchInput.addEventListener("input", toggleCloseButton);
 
 // ? learning about the DOM via console logs
 
@@ -190,6 +208,8 @@ closeButton.addEventListener("click", clearSearch);
 function clearSearch() {
   // clear the searchBar
   searchInput.value = "";
+  // Hide the close button
+  closeButton.style.display = "none";
   //   Rerun display function
   displayAllPokemon(allPokemon);
   //   Message for not found
