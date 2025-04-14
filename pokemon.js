@@ -12,10 +12,17 @@ const searchInput = document.querySelector("#search-input");
 const numberFilter = document.querySelector("#number");
 const nameFilter = document.querySelector("#name");
 const notFoundMessage = document.querySelector("#not-fond-message");
+const sortIcon = document.getElementById("sort-icon");
+const filterWrapper = document.querySelector(".filter-wrapper");
+// ! Trouble shooting clicked icon for radio
+sortIcon.addEventListener("click", () => {
+  // console.log("Sort icon clicked!"); // Debug check
+  filterWrapper.classList.toggle("visible");
+});
 
 // ? learning about the DOM via console logs
 
-console.log("the listWrapper document is:", listWrapper);
+// console.log("the listWrapper document is:", listWrapper);
 
 // ? Variable declarations for pokedex
 
