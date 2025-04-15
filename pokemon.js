@@ -18,6 +18,11 @@ const filterWrapper = document.querySelector(".filter-wrapper");
 // ! Trouble shooting clicked icon for radio
 // ! delay effect when clicking the button.
 
+// ? Testing the search bar highlight
+
+// document.querySelector(".search-wrap").style.border = "1px solid red";
+// document.querySelector(".search-bar").style.border = "1px solid blue";
+
 // ? event listener functions for radio buttons
 sortIcon.addEventListener("click", (e) => {
   e.stopPropagation(); // prevents bubbling up if needed
