@@ -1,164 +1,39 @@
-// TODO: code out the functionality of the pokemon API
+// pokemon.js
+// This file stores logic related to fetching, storing, and displaying Pokémon
+// We moved search-related event listeners into search.js for separation of concerns
 
-// Defining the maximum number of pokemon. Johto is included.
-const MAX_POKEMON = 251;
-// ?  listWrapper document.querySelector is going to grab the element inside the DOM
-// ? Context: DOM is Document Object Model. It's a tree that represents the structure of the HTML document.
-// ? Each HTML tags represent a node within the tree and JavaScript has the ability to manipulate and grab those nodes.
-// ? Hence document.querySelector is going to grab the element inside the DOM.
+// Store all Pokémon up to Johto
+export const MAX_POKEMON = 251;
+
+// Exporting allPokemon so search.js can access and filter it
+export let allPokemon = [];
+
+// Grabbing the parent container where the Pokémon list will be rendered
 const listWrapper = document.querySelector(".list-wrapper");
-// ? Note the # indicates id in CSS.
-const searchInput = document.querySelector("#search-input");
-const numberFilter = document.querySelector("#number");
-const nameFilter = document.querySelector("#name");
-const notFoundMessage = document.querySelector("#not-fond-message");
-const sortIcon = document.getElementById("sort-icon");
-const filterWrapper = document.querySelector(".filter-wrapper");
 
-// ! Trouble shooting clicked icon for radio
-// ! delay effect when clicking the button.
+// This function dynamically displays a list of Pokémon in the DOM
+export const displayAllPokemon = (pokemon) => {
+  listWrapper.innerHTML = ""; // Clear the list before rendering new items
 
-// ? Testing the search bar highlight
-
-// document.querySelector(".search-wrap").style.border = "1px solid red";
-// document.querySelector(".search-bar").style.border = "1px solid blue";
-
-// ? event listener functions for radio buttons
-sortIcon.addEventListener("click", (e) => {
-  e.stopPropagation(); // prevents bubbling up if needed
-  console.log("Sort icon clicked!"); // Debug check
-  filterWrapper.classList.toggle("visible");
-});
-
-// ? event listener function for search input
-const toggleCloseButton = () => {
-  if (searchInput.value.trim() !== "") {
-    // show the button when there is text
-    closeButton.style.display = "block";
-  } else {
-    closeButton.style.display = "none";
-  }
-};
-
-// Add event listeners
-searchInput.addEventListener("input", toggleCloseButton);
-
-// ? learning about the DOM via console logs
-
-// console.log("the listWrapper document is:", listWrapper);
-
-// ? Variable declarations for pokedex
-
-// array to store all pokemon
-
-// We can do API requests based on URL and what's within the URL.
-
-let allPokemon = [];
-// ? A way to understand get calls. I will use Axios instead
-// fetch(`https://pokeapi.co/api/v2/pokemon?limit=${MAX_POKEMON}`)
-//   .then((response) => response.json())
-//   .then((data) => {
-//     allPokemon = data.results;
-//     // ? API structure the .results allows you to dig deeper into the data
-//     console.log("the total pokemon in data is:", data.results);
-//     console.log("the pokemon in data is:", data.results[0]);
-//     console.log("the name of the  pokemon in data is:", data.results[0].name);
-//     console.log(
-//       "the name url of the  pokemon in data is:",
-//       data.results[0].url
-//     );
-//     // console.log("the pokemon in data is:", data);
-//   });
-
-//   ? Axios function
-// ! Refactor this code to use async/await(DONE)
-const getAllPokemon = async () => {
-  try {
-    // ?   define a response and data
-    const response = await axios.get(
-      `https://pokeapi.co/api/v2/pokemon?limit=${MAX_POKEMON}`
-    );
-    const data = response.data;
-
-    //? log the data for debugging
-    // console.log("The pokemon data:", data);
-    // console.log("The pokemon in data is:", data.results[0]);
-    // console.log("The name of the pokemon in data is:", data.results[0].name);
-    // console.log("The URL of the pokemon in data is:", data.results[0].url);
-
-    //  ? Store all the pokemon
-    allPokemon = data.results;
-    // console.log("the total pokemon in the data is:", data.results.length);
-
-    // ? Display the pokemon
-    displayAllPokemon(allPokemon);
-  } catch (error) {
-    console.error("Error fetching Pokemon:", error);
-  }
-};
-
-getAllPokemon();
-
-// ? Seeing if the pokemon are inside AllPokemon outside the function
-// ! tutorial code: want to try it using axios
-// async function fetchPokemonDataBeforeRedirect(id) {
-//   try {
-//     const response = await promise.all(
-//       `https://pokeapi.co/api/v2/pokemon?limit=${id}`
-//     );
-//     const data = response.data;
-//     allPokemon = data.results;
-//   } catch (error) {
-//     console.error("Error fetching Pokemon:", error);
-//   }
-// }
-
-// ? My attempt to fetch the pokemon individually
-
-const fetchPokemonDataBeforeRedirect = async (id) => {
-  try {
-    // ? Attempting a parallel request with two constants, pokemon and pokemon species.
-    const [pokemon, pokemonSpecies] = await Promise.all([
-      axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`),
-      axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}`),
-    ]);
-
-    // Handle your data, which will be in pokemon.data and pokemonSpecies.data
-    // console.log("Pokemon Data:", pokemon.data);
-    // console.log("Pokemon Species Data:", pokemonSpecies.data);
-
-    return true;
-  } catch (error) {
-    console.error("Failed to fetch Pokemon data before redirect:", error);
-  }
-};
-
-// ? A function that displays the pokemon
-
-const displayAllPokemon = (pokemon) => {
-  // ? call the listWrapper we already made in the HTML
-  //   ? Every time you fetch you clear the HTML
-  listWrapper.innerHTML = "";
-
-  // ? for loop for each pokemon
   pokemon.forEach((pokemon) => {
-    //     define pokemon id
-    const pokemonID = pokemon.url.split("/")[6];
-    // define the listitem
+    const pokemonID = pokemon.url.split("/")[6]; // Extract the ID from the API URL
     const listItem = document.createElement("div");
     listItem.className = "list-item";
+
+    // Construct the HTML for each Pokémon card
     listItem.innerHTML = `
-   <div class = "number-wrap">
-      <p class = "caption-fonts">#${pokemonID}</p>
-   </div>
-   <div class = "image-wrap">
-     <img src="https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/dream-world/${pokemonID}.svg" alt="${pokemon.name}" />
-   </div>
-    <div class = "name-wrap">
-      <p class = "body3-fonts">#${pokemon.name}</p>
-   </div>
-`;
-    //    ? create an event listener for the ListItem
+      <div class="number-wrap">
+        <p class="caption-fonts">#${pokemonID}</p>
+      </div>
+      <div class="image-wrap">
+        <img src="https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/dream-world/${pokemonID}.svg" alt="${pokemon.name}" />
+      </div>
+      <div class="name-wrap">
+        <p class="body3-fonts">#${pokemon.name}</p>
+      </div>
+    `;
+
+    // Set up click event to redirect to detail page and preload Pokémon data
     listItem.addEventListener("click", async () => {
       const success = await fetchPokemonDataBeforeRedirect(pokemonID);
       if (success) {
@@ -166,57 +41,51 @@ const displayAllPokemon = (pokemon) => {
       }
     });
 
-    // ? append to listItem to listWrapper.
-    listWrapper.appendChild(listItem);
+    listWrapper.appendChild(listItem); // Add the card to the page
   });
 };
 
-// ?enable the search on the pokedex.
-// Search function and event listener
-searchInput.addEventListener("keyup", handleSearch);
-
-//   ! refactor the handleSearch function to extract the filter logic into a separate function
-function handleSearch() {
-  //   Create a searchTerm
-  const searchTerm = searchInput.value.toLowerCase();
-  // filter the pokemon
-  const filteredPokemon = getFilteredPokemon(searchTerm);
-  // display the pokemon
-  displayAllPokemon(filteredPokemon);
-
-  //   Message for not found
-  notFoundMessage.style.display =
-    filteredPokemon.length === 0 ? "block" : "none";
-}
-
-const getFilteredPokemon = (searchTerm) => {
-  // ? Checking if the number radio button or name radio button is checked for search
-  if (numberFilter.checked) {
+// A pure function to filter Pokémon by number or name
+export const getFilteredPokemon = (searchTerm, filterType) => {
+  if (filterType === "number") {
     return allPokemon.filter((pokemon) => {
       const pokemonID = pokemon.url.split("/")[6];
       return pokemonID.startsWith(searchTerm);
     });
-  } else if (nameFilter.checked) {
-    return allPokemon.filter((pokemon) => {
-      return pokemon.name.toLowerCase().startsWith(searchTerm);
-    });
+  } else if (filterType === "name") {
+    return allPokemon.filter((pokemon) =>
+      pokemon.name.toLowerCase().startsWith(searchTerm)
+    );
   } else {
     return allPokemon;
   }
 };
 
-// ? wire  the close button
-const closeButton = document.querySelector(".search-close-icon");
+// Fetch detailed data about a Pokémon before redirecting to its detail page
+const fetchPokemonDataBeforeRedirect = async (id) => {
+  try {
+    const [pokemon, species] = await Promise.all([
+      axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`),
+      axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}`),
+    ]);
+    return true;
+  } catch (error) {
+    console.error("Error before redirect:", error);
+  }
+};
 
-closeButton.addEventListener("click", clearSearch);
+// Fetch the entire list of Pokémon (up to MAX_POKEMON)
+const getAllPokemon = async () => {
+  try {
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon?limit=${MAX_POKEMON}`
+    );
+    allPokemon = response.data.results;
+    displayAllPokemon(allPokemon); // Display the full list on load
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+};
 
-function clearSearch() {
-  // clear the searchBar
-  searchInput.value = "";
-  // Hide the close button
-  closeButton.style.display = "none";
-  //   Rerun display function
-  displayAllPokemon(allPokemon);
-  //   Message for not found
-  notFoundMessage.style.display = "none";
-}
+// Call the function when the file is loaded
+getAllPokemon();

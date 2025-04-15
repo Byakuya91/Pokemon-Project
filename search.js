@@ -1,45 +1,60 @@
-// ? learning pattern for DOM manipulation
-// ? STEP ONE: use query selectors to target specific parts of the DOM for search.
+// search.js
+// This file handles all DOM input, search filtering, and UI-related event listeners
 
-const inputElement = document.getElementById("search-input");
-const search_icon = document.getElementById("search-close-icon");
-const sort_wrapper = document.querySelector(".sort-wrapper");
+// Importing the data and display logic from pokemon.js
+import {
+  allPokemon,
+  displayAllPokemon,
+  getFilteredPokemon,
+} from "./pokemon.js";
 
-// ?Console logs to test(PASS)
+// Grab search input and related DOM elements
+const searchInput = document.querySelector("#search-input");
+const numberFilter = document.querySelector("#number");
+const nameFilter = document.querySelector("#name");
+const notFoundMessage = document.querySelector("#not-fond-message");
+const closeButton = document.querySelector(".search-close-icon");
+const sortIcon = document.getElementById("sort-icon");
+const filterWrapper = document.querySelector(".filter-wrapper");
 
-// console.log("the inputElement should be:", inputElement);
-// console.log("the search_icon  should be:", search_icon);
-// console.log("the sort_wrapper  should be:", sort_wrapper);
+// Show or hide the close ("X") button based on input
+const toggleCloseButton = () => {
+  if (searchInput.value.trim() !== "") {
+    closeButton.style.display = "block";
+  } else {
+    closeButton.style.display = "none";
+  }
+};
 
-// ? STEP TWO: add event listeners to the input element for search and the close icon for search(ONGOING)
-inputElement.addEventListener("input", () => {
-  //   console.log("text entered!");
-  handleInputChange(inputElement);
+// Clear the search input and redisplay the full Pokémon list
+const clearSearch = () => {
+  searchInput.value = "";
+  closeButton.style.display = "none";
+  displayAllPokemon(allPokemon); // Restore full list
+  notFoundMessage.style.display = "none"; // Hide "not found" message
+};
+
+// Perform search and filtering based on selected criteria
+const handleSearch = () => {
+  const searchTerm = searchInput.value.toLowerCase();
+  const filterType = numberFilter.checked ? "number" : "name";
+  const filtered = getFilteredPokemon(searchTerm, filterType);
+
+  displayAllPokemon(filtered); // Update list with filtered results
+  notFoundMessage.style.display = filtered.length === 0 ? "block" : "none";
+};
+
+// Input change listener (fires on each keystroke)
+searchInput.addEventListener("input", () => {
+  toggleCloseButton();
+  handleSearch();
 });
 
-search_icon.addEventListener("click", () => {
-  //   console.log("Search icon clicked!");
-  handleSearchCloseOnClick;
+// Clear button listener
+closeButton.addEventListener("click", clearSearch);
+
+// Sort icon toggles dropdown visibility
+sortIcon.addEventListener("click", (e) => {
+  e.stopPropagation();
+  filterWrapper.classList.toggle("visible");
 });
-sort_wrapper.addEventListener("click", () => {
-  //   console.log("text entered!");
-  handleSortIconOnClick;
-});
-
-// ?handler functions
-
-// const handleInputChange = (inputElement) => {
-//   // ? define inputValue for use
-//   const inputValue = inputElement.value;
-
-//   // ? targeting if the search Icon is visible
-//   if (inputValue !== "") {
-//     document
-//       .querySelector(".search-close-icon")
-//       .classList.add("search-close-icon-visible");
-//   } else {
-//     document
-//       .querySelector(".search-close-icon")
-//       .classList.remove("search-close-icon-visible");
-//   }
-// };
