@@ -17,6 +17,23 @@ const closeButton = document.querySelector(".search-close-icon");
 const sortIcon = document.getElementById("sort-icon");
 const filterWrapper = document.querySelector(".filter-wrapper");
 
+// Event Listners
+
+numberFilter.addEventListener("change", () => {
+  searchInput.placeholder = "Enter Pokemon Number";
+});
+
+nameFilter.addEventListener("change", () => {
+  searchInput.placeholder = " Enter Pokemon Name";
+});
+
+// Set placeholder on initial load based on which filter is checked
+if (numberFilter.checked) {
+  searchInput.placeholder = "Enter Pokémon number";
+} else {
+  searchInput.placeholder = "Enter Pokémon name";
+}
+
 // Show or hide the close ("X") button based on input
 const toggleCloseButton = () => {
   if (searchInput.value.trim() !== "") {
@@ -46,6 +63,22 @@ const handleSearch = () => {
 
 // Input change listener (fires on each keystroke)
 searchInput.addEventListener("input", () => {
+  // ? remove any unnecessary white space
+  const searchValue = searchInput.value.trim();
+  console.log("user typed:", searchValue);
+
+  // STEP ONE: auto-toggle the filter based on input type
+  if (searchValue !== " ") {
+    // ?Check if the value starts with a digit using regex
+    if (/^\d/.test(searchValue)) {
+      console.log("Input starts with a digit. Switching to number filter.");
+      numberFilter.checked = true;
+    } else {
+      console.log("Input starts with a letter. Switching to name filter.");
+      nameFilter.checked = true;
+    }
+  }
+
   toggleCloseButton();
   handleSearch();
 });

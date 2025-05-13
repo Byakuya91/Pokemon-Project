@@ -47,6 +47,12 @@ export const displayAllPokemon = (pokemon) => {
 
 // A pure function to filter Pokémon by number or name
 export const getFilteredPokemon = (searchTerm, filterType) => {
+  // ? checking the searchtype
+  console.log("The searchTerm is:", searchTerm);
+  console.log("the searchterm type is:", typeof searchTerm);
+
+  // TODO: Implement auto-switch based on inputType
+  // ?SOLUTION modify the event listener in Search.js
   if (filterType === "number") {
     return allPokemon.filter((pokemon) => {
       const pokemonID = pokemon.url.split("/")[6];
