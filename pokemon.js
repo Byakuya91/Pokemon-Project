@@ -8,6 +8,8 @@ export const MAX_POKEMON = 251;
 // Exporting allPokemon so search.js can access and filter it
 export let allPokemon = [];
 
+console.log("the allpokemon is:", allPokemon);
+
 // Grabbing the parent container where the Pokémon list will be rendered
 const listWrapper = document.querySelector(".list-wrapper");
 
@@ -87,6 +89,7 @@ const getAllPokemon = async () => {
       `https://pokeapi.co/api/v2/pokemon?limit=${MAX_POKEMON}`
     );
     allPokemon = response.data.results;
+    console.log("all pokemon after fetch:", allPokemon);
     displayAllPokemon(allPokemon); // Display the full list on load
   } catch (error) {
     console.error("Fetch error:", error);
