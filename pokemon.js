@@ -98,3 +98,29 @@ const getAllPokemon = async () => {
 
 // Call the function when the file is loaded
 getAllPokemon();
+
+// ?! Testing localStorage for favorites
+// Add favorites manually
+localStorage.setItem("favorites", JSON.stringify(["1", "6", "151"]));
+
+// Get favorites
+const favorites = JSON.parse(localStorage.getItem("favorites"));
+console.log("Current favorites:", favorites);
+
+// check if a pokemon is a favorite
+const isFavorite = favorites.includes("6");
+console.log("Is Charizard (ID 6) a favorite?", isFavorite);
+
+// add favorite pokemon
+const idToAdd = "25"; // Pikachu
+if (!favorites.includes(idToAdd)) {
+  favorites.push(idToAdd);
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+}
+console.log("Updated favorites:", favorites);
+
+// remove favorite pokemon
+const idToRemove = "6"; // Charizard
+const updatedFavorites = favorites.filter((id) => id !== idToRemove);
+localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+console.log("Updated favorites:", updatedFavorites);
