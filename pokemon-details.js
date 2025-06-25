@@ -1,3 +1,6 @@
+// ?Imports
+import { addFavorite, removeFavorite } from "./favoritePokemon.js";
+
 // ? establish pokemon id
 let currentPokemonID = null;
 
@@ -342,3 +345,13 @@ const getEnglishFlavorText = (pokemonSpecies) => {
 
   return "";
 };
+
+// ?! Favorites list logic
+
+// ? STEP ONE: select the elements from the DOM
+const addButton = document.querySelector(
+  ".favorites-wrapper button: first-child"
+);
+const removeButton = document.querySelector(
+  ".favorites-wrapper button:last-child"
+);
