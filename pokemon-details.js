@@ -1,6 +1,29 @@
 // ?Imports
 import { addFavorite, removeFavorite } from "./favoritePokemon.js";
 
+// ? Favorites list  grabbing pokemon parameters
+const params = new URLSearchParams(window.location.search);
+const pokemonID = params.get("id");
+
+// ? favoritesList steps
+
+// STEP ONE: grab button ids from buttons
+
+const addButton = document.getElementById("addFavoriteBtn");
+const removeButton = document.getElementById("removeFavoriteBtn");
+
+// STEP TWO: event listeners to wire the buttons
+
+addButton.addEventListener("click", () => {
+  addFavorite(pokemonID);
+  console.log(`Added Pokémon ${pokemonID} to favorites.`);
+});
+
+removeButton.addEventListener("click", () => {
+  removeFavorite(pokemonID);
+  console.log(`Removed Pokémon ${pokemonID} from favorites.`);
+});
+
 // ? establish pokemon id
 let currentPokemonID = null;
 
@@ -345,13 +368,3 @@ const getEnglishFlavorText = (pokemonSpecies) => {
 
   return "";
 };
-
-// ?! Favorites list logic
-
-// ? STEP ONE: select the elements from the DOM
-const addButton = document.querySelector(
-  ".favorites-wrapper button: first-child"
-);
-const removeButton = document.querySelector(
-  ".favorites-wrapper button:last-child"
-);
