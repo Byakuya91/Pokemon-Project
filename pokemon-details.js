@@ -1,5 +1,5 @@
 // ?Imports
-import { addFavorite, removeFavorite } from "./favoritePokemon.js";
+import { addFavorite, removeFavorite, isFavorite } from "./favoritePokemon.js";
 
 // ? Favorites list  grabbing pokemon parameters
 const params = new URLSearchParams(window.location.search);
@@ -7,21 +7,55 @@ const pokemonID = params.get("id");
 
 // ? favoritesList steps
 
-// STEP ONE: grab button ids from buttons
+// STEP ONE: grab button ids from buttons(OLD CODE FOR favorites)
 
-const addButton = document.getElementById("addFavoriteBtn");
-const removeButton = document.getElementById("removeFavoriteBtn");
+// const addButton = document.getElementById("addFavoriteBtn");
+// const removeButton = document.getElementById("removeFavoriteBtn");
 
 // STEP TWO: event listeners to wire the buttons
 
-addButton.addEventListener("click", () => {
-  addFavorite(pokemonID);
-  console.log(`Added Pokémon ${pokemonID} to favorites.`);
-});
+// addButton.addEventListener("click", () => {
+//   addFavorite(pokemonID);
+//   console.log(`Added Pokémon ${pokemonID} to favorites.`);
+// });
 
-removeButton.addEventListener("click", () => {
-  removeFavorite(pokemonID);
-  console.log(`Removed Pokémon ${pokemonID} from favorites.`);
+// removeButton.addEventListener("click", () => {
+//   removeFavorite(pokemonID);
+//   console.log(`Removed Pokémon ${pokemonID} from favorites.`);
+// });
+
+// NOW THE CODE for toggling favorite button
+
+// ?Grab the favorite button and icon
+const favoriteBtn = document.getElementById("favoriteToggleBtn");
+const favoriteIcon = document.getElementById("favoriteIcon");
+
+// ?Function to toggle SVG fill/stroke based on favorite status
+const updateFavoritePokemon = (isFav) => {
+  favoriteIcon.setAttribute("fill", isFav ? "currentColor" : "none");
+  favoriteIcon.setAttribute("stroke", isFav ? "none" : "currentColor");
+
+  // Tooltip/title update
+  favoriteBtn.setAttribute(
+    "title",
+    isFav ? "Remove from favorites" : "Add to favorites"
+  );
+};
+
+// ? On intial page load
+updateFavoritePokemon(isFavorite(pokemonID));
+
+// ?Click listener for favorite button
+favoriteBtn.addEventListener("click", () => {
+  const currentlyFav = isFavorite(pokemonID);
+
+  if (currentlyFav) {
+    removeFavorite(pokemonID);
+  } else {
+    addFavorite(pokemonID);
+  }
+
+  updateFavoritePokemon(!currentlyFav);
 });
 
 // ? establish pokemon id

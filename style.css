@@ -929,3 +929,20 @@ html {
   outline: 2px solid var(--identity-primary);
   outline-offset: 2px;
 }
+
+
+.favorites-wrapper{
+  position: absolute;
+  top: 48px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: crimson;
+  transition: fill 0.2s ease;
+}
