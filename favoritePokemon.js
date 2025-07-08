@@ -1,19 +1,19 @@
 // ? Key name for localStorage
-const FAVORITES_POKEMON_KEY = "favoritePokemon"; // 🛠️ Changed to standard key
+const FAVORITES_POKEMON_KEYS = "favoritePokemon";
 
 // CRUD operation functions for localStorage
 
 // ? Utility: get all favorite pokemon IDs from localStorage
 export const getFavoritePokemon = () => {
   // Grab the favorite pokemon from localStorage
-  const favoritePokemon = localStorage.getItem(FAVORITES_POKEMON_KEY);
+  const favoritePokemon = localStorage.getItem(FAVORITES_POKEMON_KEYS);
   // ? Parse the favorite pokemon array from JSON string
   return favoritePokemon ? JSON.parse(favoritePokemon) : [];
 };
 
 // ? Utility: Save array of IDs to localStorage
 const saveFavorites = (favorites) => {
-  localStorage.setItem(FAVORITES_POKEMON_KEY, JSON.stringify(favorites));
+  localStorage.setItem(FAVORITES_POKEMON_KEYS, JSON.stringify(favorites));
 };
 
 // ? Utility: Add Pokemon ID to favorites
@@ -31,7 +31,6 @@ export const addFavorite = (pokemonID) => {
 
 // ? Utility: Remove Pokemon ID from favorites
 export const removeFavorite = (pokemonID) => {
-  // Grab the favorites
   const idStr = String(pokemonID); // ✅ Always treat as string
   let favorites = getFavoritePokemon();
 
@@ -44,13 +43,11 @@ export const removeFavorite = (pokemonID) => {
 
 // ? Utility: Check if a Pokemon ID is favorited
 export const isFavorite = (pokemonID) => {
-  // Grab the favorite pokemon
   const favorites = getFavoritePokemon();
-  // Check if the pokemon is a favorite
-  return favorites.includes(String(pokemonID)); // ✅ Compare as string
+  return favorites.includes(String(pokemonID)); // ✅ compare as string
 };
 
 // ? Optional Utility: Clear all favorites (for testing/dev)
 export const clearFavorites = () => {
-  localStorage.removeItem(FAVORITES_POKEMON_KEY);
+  localStorage.removeItem(FAVORITES_POKEMON_KEYS);
 };

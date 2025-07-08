@@ -45,13 +45,15 @@ const updateFavoritePokemon = (isFav) => {
 };
 
 // ?Click listener for favorite button
+// ?Click listener for favorite button
 favoriteBtn.addEventListener("click", () => {
-  const currentlyFav = isFavorite(pokemonID);
+  const idStr = String(currentPokemonID); // ✅ always use current id as string
+  const currentlyFav = isFavorite(idStr);
 
   if (currentlyFav) {
-    removeFavorite(pokemonID);
+    removeFavorite(idStr);
   } else {
-    addFavorite(pokemonID);
+    addFavorite(idStr);
   }
 
   updateFavoritePokemon(!currentlyFav);
