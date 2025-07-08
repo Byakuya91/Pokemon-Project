@@ -1,6 +1,8 @@
 // ?Imports
 import { addFavorite, removeFavorite, isFavorite } from "./favoritePokemon.js";
 
+// // ? On intial page load
+// updateFavoritePokemon(isFavorite(pokemonID));
 // ? Favorites list  grabbing pokemon parameters
 const params = new URLSearchParams(window.location.search);
 const pokemonID = params.get("id");
@@ -41,9 +43,6 @@ const updateFavoritePokemon = (isFav) => {
     isFav ? "Remove from favorites" : "Add to favorites"
   );
 };
-
-// ? On intial page load
-updateFavoritePokemon(isFavorite(pokemonID));
 
 // ?Click listener for favorite button
 favoriteBtn.addEventListener("click", () => {
@@ -99,6 +98,8 @@ async function loadPokemon(id) {
 
     if (currentPokemonID === id) {
       displayPokemonDetails(pokemon);
+      //  Update the heart icon based on current pokemon Favorite status
+      updateFavoritePokemon(isFavorite(String(id)));
       const flavorText = getEnglishFlavorText(pokemonSpecies);
       document.querySelector(".body3-fonts.pokemon-description").textContent =
         flavorText;
